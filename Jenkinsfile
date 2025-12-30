@@ -12,6 +12,7 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
+                    args '-u root:root'
                     reuseNode true
                 }
             }
@@ -19,7 +20,6 @@ pipeline {
                 sh '''
                     ls -la
                     node --version
-                    sudo chown -R 1080:1080 "/.npm"
                     npm --version
                     npm ci
                     npm run build
@@ -34,13 +34,13 @@ pipeline {
                     agent {
                         docker {
                             image 'node:18-alpine'
+                            args '-u root:root'
                             reuseNode true
                         }
                     }
 
                     steps {
                         sh '''
-                            sudo chown -R 1080:1080 "/.npm"
                             #test -f build/index.html
                             npm test
                         '''
@@ -56,13 +56,13 @@ pipeline {
                     agent {
                         docker {
                             image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            args '-u root:root'
                             reuseNode true
                         }
                     }
 
                     steps {
                         sh '''
-                            sudo chown -R 1080:1080 "/.npm"
                             npm install serve
                             node_modules/.bin/serve -s build &
                             sleep 10
@@ -83,12 +83,12 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
+                    args '-u root:root'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                    sudo chown -R 1080:1080 "/.npm"
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
