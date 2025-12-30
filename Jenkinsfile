@@ -19,6 +19,7 @@ pipeline {
                 sh '''
                     ls -la
                     node --version
+                    sudo chown -R 1080:1080 "/.npm"
                     npm --version
                     npm ci
                     npm run build
@@ -39,6 +40,7 @@ pipeline {
 
                     steps {
                         sh '''
+                            sudo chown -R 1080:1080 "/.npm"
                             #test -f build/index.html
                             npm test
                         '''
@@ -60,6 +62,7 @@ pipeline {
 
                     steps {
                         sh '''
+                            sudo chown -R 1080:1080 "/.npm"
                             npm install serve
                             node_modules/.bin/serve -s build &
                             sleep 10
@@ -85,6 +88,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    sudo chown -R 1080:1080 "/.npm"
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
