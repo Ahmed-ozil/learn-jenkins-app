@@ -2,6 +2,21 @@ pipeline {
     agent any
     stages {
 
+        stage('FILE') {
+            agent {
+                docker {
+                    image 'alpine'
+                }
+            }
+            steps {
+                
+                sh '''
+                    echo 1234 > test.txt
+                    cat test.txt
+                '''
+                
+            }
+        }
         stage('AWS') {
             agent {
                 docker {
@@ -14,6 +29,7 @@ pipeline {
                     sh '''
                         aws --version
                         aws s3 ls
+                        aws s3 cp test.txt s3://ozil-test-01/test.txt
                     '''
                 }
             }
